@@ -1,0 +1,15 @@
+[Unit]
+Description=Brennes X Back Python Hosting
+After=network.target
+
+[Service]
+User=hosting
+WorkingDirectory=/opt/brennes-hosting
+Environment=ADMIN_USER=admin
+Environment=ADMIN_PASS=CHANGE_THIS
+Environment=SECRET_KEY=CHANGE_THIS_LONG_RANDOM_SECRET
+ExecStart=/opt/brennes-hosting/.venv/bin/gunicorn -w 2 -b 127.0.0.1:8000 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
