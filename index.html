@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hosting Dashboard</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080808 url("/static/bg.png") center/cover fixed;color:#eee;font-family:Arial}
+.wrap{max-width:1100px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:40px;margin:5px 0}.muted{color:#aaa}.panel,.card{background:#090909e8;border:1px solid #542020;border-radius:18px;padding:18px;margin-top:18px;box-shadow:0 15px 50px #000}
+input{padding:12px;border:1px solid #392222;background:#120e0e;color:#fff;border-radius:9px}button,a.btn{padding:10px 13px;border:0;border-radius:9px;background:#a71919;color:#fff;text-decoration:none;font-weight:bold;cursor:pointer}
+.btn2{background:#262020!important}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:18px}.status{font-weight:bold}.on{color:#6dff9a}.off{color:#ff8585}
+form{display:inline}.danger{background:#602020!important}.small{font-size:12px}
+</style></head><body><div class="wrap">
+<div class="top"><div><h1>BRENNES X BACK</h1><div class="muted">Python Hosting Dashboard</div></div><a class="btn btn2" href="/logout">Logout</a></div>
+<div class="panel"><h3>Upload Python bot</h3><form action="/upload" method="post" enctype="multipart/form-data">
+<input name="name" placeholder="project name" required> <input type="file" name="file" accept=".py,.zip" required> <button>UPLOAD</button></form>
+<p class="muted small">For your own trusted bots. Accepted: .py / .zip. Each project runs as its own process.</p></div>
+<div class="grid">{% for p in projects %}
+<div class="card"><h3>{{p.name}}</h3>
+<div class="status {{'on' if p.running else 'off'}}">{{'● RUNNING' if p.running else '● STOPPED'}}</div>
+<p class="muted small">{{p.files|join(', ')}}</p>
+{% if p.running %}<form method="post" action="/stop/{{p.name}}"><button class="danger">STOP</button></form>{% else %}<form method="post" action="/start/{{p.name}}"><button>START</button></form>{% endif %}
+<a class="btn btn2" href="/logs/{{p.name}}">LOGS</a></div>
+{% else %}<div class="card">No projects yet.</div>{% endfor %}</div>
+</div></body></html>
